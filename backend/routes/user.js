@@ -11,7 +11,7 @@ const uploadCtrl = require('../controllers/upload');
 
 /* AUTH */
 router.post('/signup', password, authCtrl.signup);
-router.post('/login', auth, authCtrl.login);
+router.post('/login', authCtrl.login);
 router.get('/logout', auth, authCtrl.logout);
 
 /* USER */
