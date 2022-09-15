@@ -15,23 +15,92 @@ exports.getAllUsers = async (req, res) => {
 exports.getOneUser = (req, res) => {
   if (!ObjectId.isValid(req.params.id))
     return res.status(400).json('Unknown ID : ' + req.params.id);
-  User.findById(req.params.id, (err, data) => {
-    if (!err) res.json(data);
-    else console.log('Unknown ID : ' + err);
-  }).select('-password');
+  User.find({ _id: req.params.id })
+    .select('-password')
+    .then((user) => {
+      res.status(200).json(user);
+    })
+    .catch((error) => res.status(400).json(error));
 };
 
-exports.modifyUser = async (req, res) => {
-  if (!ObjectId.isValid(req.body.id))
-    return res.status(400).json('Unknown ID : ' + req.body.id);
-  try {
-    const user = await User.findById(req.body.userId);
-    user.bio = req.body.bio;
-    await user.save();
-    res.status(200).json({ message: 'Bio updated' });
-  } catch (error) {
-    res.status(500).json({ error: 'Invalid request !' });
-  }
+exports.modifyUser = (req, res) => {
+  if (!ObjectId.isValid(req.params.id))
+    return res.status(400).json('Unknown ID : ' + req.params.id);
+  User.findOne({ _id: req.params.id })
+    .then((user) => {
+      if (user && user.id === req.auth.userId) {
+        if (!req.body.password && !req.file) {
+          User.updateOne(
+            { _id: req.params.id },
+            {
+              email: req.body.email,
+              bio: req.body.bio,
+            }
+          )
+            .then(() => res.status(200).json({ message: 'User modified !' }))
+            .catch((error) => res.status(500).json({ error }));
+        } else if (!req.body.password && req.file) {
+          User.updateOne(
+            { _id: req.params.id },
+            {
+              email: req.body.email,
+              bio: req.body.bio,
+              picture: `${req.protocol}://${req.get(
+                'host'
+              )}/client/public/uploads/${req.file.filename}`,
+            }
+          )
+            .then(() => res.status(200).json({ message: 'User modified !' }))
+            .catch((error) => res.status(500).json({ error }));
+        } else if (req.body.password && req.file) {
+          bcrypt
+            .hash(req.body.password, 10)
+            .then((hash) => {
+              User.updateOne(
+                { _id: req.params.id },
+                {
+                  $set: {
+                    email: req.body.email,
+                    password: hash,
+                    bio: req.body.bio,
+                    picture: `${req.protocol}://${req.get(
+                      'host'
+                    )}/client/public/uploads/${req.file.filename}`,
+                  },
+                }
+              )
+                .then(() =>
+                  res.status(200).json({ message: 'User modified !' })
+                )
+                .catch((error) => res.status(500).json({ error }));
+            })
+            .catch((error) => res.status(500).json({ error }));
+        } else {
+          bcrypt
+            .hash(req.body.password, 10)
+            .then((hash) => {
+              User.updateOne(
+                { _id: req.params.id },
+                {
+                  $set: {
+                    email: req.body.email,
+                    password: hash,
+                    bio: req.body.bio,
+                  },
+                }
+              )
+                .then(() =>
+                  res.status(200).json({ message: 'User modified !' })
+                )
+                .catch((error) => res.status(500).json({ error }));
+            })
+            .catch((error) => res.status(500).json({ error }));
+        }
+      } else {
+        return res.status(401).json({ message: 'Not allowed!' });
+      }
+    })
+    .catch((error) => res.status(500).json({ error }));
 };
 
 exports.deleteUser = async (req, res) => {

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import axios from 'axios';
 import Logo from '../style/assets/icon-red.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -19,6 +20,7 @@ function Login() {
         }
       );
       console.log(response.data);
+      navigate('/');
     } catch (error) {
       console.log(error.response);
     }
@@ -47,7 +49,9 @@ function Login() {
           />
           <button type="submit">Valider</button>
         </form>
-        <Link to="/signup">Vous n'avez pas de compte ? Inscrivez-vous ici</Link>
+        <Link className="link" to="/signup">
+          Vous n'avez pas de compte ? Inscrivez-vous ici
+        </Link>
       </div>
     </>
   );

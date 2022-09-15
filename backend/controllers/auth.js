@@ -31,7 +31,6 @@ exports.signup = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  console.log(req.auth);
   const cryptedEmail = cryptoJs
     .HmacSHA256(req.body.email, process.env.SECRET_EMAIL_KEY)
     .toString();
@@ -48,7 +47,10 @@ exports.login = (req, res, next) => {
           } else {
             const token = createToken(user.id);
             console.log(user.id);
-            res.cookie('jwt', token, { httpOnly: true });
+            res.cookie('jwt', token, {
+              maxAge: 1 * 60 * 60 * 24 * 1000,
+              httpOnly: true,
+            });
             res.status(200).json({
               userId: user.id,
             });

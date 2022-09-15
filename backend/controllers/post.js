@@ -18,11 +18,19 @@ let isAdmin = (req) => {
     });
 };
 
-exports.readPost = (req, res, next) => {
-  Post.find((error, data) => {
-    if (!error) res.status(200).json(data);
-    else res.status(400).json('error to get data : ' + error);
-  }).sort({ createdAt: -1 });
+exports.readPost = (req, res) => {
+  if (!ObjectId.isValid(req.params.id))
+    return res.status(400).json('Unknown ID : ' + req.params.id);
+  Post.findOne({ _id: req.params.id })
+    .then((post) => res.status(200).json(post))
+    .catch((error) => res.status(400).json(error));
+};
+
+exports.readAllPosts = (req, res) => {
+  Post.find()
+    .sort({ createdAt: -1 })
+    .then((posts) => res.status(200).json(posts))
+    .catch((error) => res.status(400).json(error));
 };
 
 exports.createPost = (req, res) => {
