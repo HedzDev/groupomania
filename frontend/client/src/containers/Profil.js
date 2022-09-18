@@ -28,12 +28,11 @@ function Profil() {
     <>
       <Header />
       <div className="profil">
-        <div>Profil</div>
         {data.map((elem, index) => {
           return (
             <div key={elem._id}>
               <ul className="profil__info">
-                <li>{elem.pseudo}</li>
+                <li>Hello {elem.pseudo}</li>
                 <li>{elem.bio}</li>
                 <li>{elem.picture}</li>
               </ul>

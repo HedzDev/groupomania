@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '../style/assets/icon-red.png';
 
@@ -7,6 +7,8 @@ function Signup() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,6 +22,7 @@ function Signup() {
         }
       );
       console.log(response);
+      navigate('/login');
     } catch (error) {
       console.log(error.response);
     }
@@ -56,7 +59,9 @@ function Signup() {
           />
           <button type="submit">Valider</button>
         </form>
-        <Link to="/login">Déjà un compte ? Connectez-vous ici !</Link>
+        <Link className="link" to="/login">
+          Déjà un compte ? Connectez-vous ici !
+        </Link>
       </div>
     </>
   );

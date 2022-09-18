@@ -27,9 +27,9 @@ function Home() {
         <CreatePostBar />
         {data.map((post, index) => {
           const timestamp = post.createdAt;
-          console.log(timestamp);
+          // console.log(timestamp);
           const date = new Date(timestamp).toLocaleDateString('fr');
-          console.log(date);
+          // console.log(date);
           return (
             <>
               <div>

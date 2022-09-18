@@ -6,8 +6,10 @@ import { Link, useNavigate } from 'react-router-dom';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [uid, setUid] = useState(null);
 
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -20,6 +22,8 @@ function Login() {
         }
       );
       console.log(response.data);
+      setUid(response.data);
+      console.log(uid);
       navigate('/');
     } catch (error) {
       console.log(error.response);

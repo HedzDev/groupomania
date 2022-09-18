@@ -131,16 +131,25 @@ table {
 
 /* Colors */
 .signupForm img {
+  padding: 15px;
+  position: relative;
+  transform: translateY(-60px) translateX(-20px);
   width: 150px;
+}
+.signupForm .link {
+  text-decoration: none;
+  color: #fd2d01;
 }
 
 .loginForm img {
+  padding: 15px;
+  position: relative;
+  transform: translateY(-60px) translateX(-20px);
   width: 150px;
 }
-
-.link {
+.loginForm .link {
   text-decoration: none;
-  color: green;
+  color: #fd2d01;
 }
 
 .wrapper {
@@ -173,11 +182,21 @@ table {
 
 .header {
   padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  transform: translateY(-60px);
+}
+.header__logo {
+  width: 150px;
+  margin-left: -20px;
 }
 .header .fa-house,
 .header .fa-user,
 .header .fa-right-from-bracket {
   margin-left: 7px;
+  color: #fd2d01;
 }
 
 /*# sourceMappingURL=index.css.map */

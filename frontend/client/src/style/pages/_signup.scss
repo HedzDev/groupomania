@@ -1,5 +1,12 @@
 .signupForm {
   img {
+    padding: 15px;
+    position: relative;
+    transform: translateY(-60px) translateX(-20px);
     width: 150px;
+  }
+  .link {
+    text-decoration: none;
+    color: $primary-color;
   }
 }
